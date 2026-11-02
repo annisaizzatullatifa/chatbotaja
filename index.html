@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="id" class="dark">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Annisa Izzatul Latifa — AI Assistant</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <script src="https://unpkg.com/lucide@latest"></script>
+
+        <script>
+            tailwind.config = {
+                darkMode: "class",
+                theme: {
+                    extend: {
+                        fontFamily: {
+                            sans: ['"Plus Jakarta Sans"', "sans-serif"],
+                            cinema: ["Cinzel", "serif"],
+                        },
+                        colors: {
+                            cinema: {
+                                bg: "#0b0a0e",
+                                surface: "#14121a",
+                                border: "#262230",
+                                crimson: "#991b1b",
+                                gold: "#f59e0b",
+                                goldLight: "#fbbf24",
+                            },
+                        },
+                    },
+                },
+            };
+        </script>
+
+        <style>
+            ::-webkit-scrollbar {
+                width: 6px;
+            }
+            ::-webkit-scrollbar-track {
+                background: transparent;
+            }
+            ::-webkit-scrollbar-thumb {
+                background: #262230;
+                border-radius: 9999px;
+            }
+            ::-webkit-scrollbar-thumb:hover {
+                background: #f59e0b;
+            }
+
+            .ambient-spotlight {
+                background: radial-gradient(
+                    ellipse at top,
+                    rgba(245, 158, 11, 0.08) 0%,
+                    rgba(153, 27, 27, 0.05) 40%,
+                    transparent 70%
+                );
+            }
+
+            @keyframes pulse-dot {
+                0%,
+                100% {
+                    opacity: 0.3;
+                    transform: translateY(0);
+                }
+                50% {
+                    opacity: 1;
+                    transform: translateY(-3px);
+                }
+            }
+            .dot-1 {
+                animation: pulse-dot 1.2s infinite 0s;
+            }
+            .dot-2 {
+                animation: pulse-dot 1.2s infinite 0.2s;
+            }
+            .dot-3 {
+                animation: pulse-dot 1.2s infinite 0.4s;
+            }
+        </style>
+    </head>
+    <body
+        class="bg-cinema-bg text-slate-100 font-sans antialiased h-screen flex flex-col overflow-hidden ambient-spotlight"
+    >
+        <!-- Minimalist Header -->
+        <header
+            class="h-16 border-b border-cinema-border/80 bg-cinema-bg/80 backdrop-blur-md px-4 md:px-8 flex items-center justify-between shrink-0 z-10"
+        >
+            <div class="flex items-center gap-3">
+                <img
+                    src="foto.JPG"
+                    alt="Annisa"
+                    class="w-9 h-9 rounded-xl object-cover border border-cinema-gold/50 shadow-sm shrink-0"
+                />
+                <div>
+                    <h1
+                        class="font-cinema font-bold text-sm md:text-base text-white tracking-wide"
+                    >
+                        Annisa Izzatul Latifa
+                    </h1>
+                    <p class="text-[11px] text-slate-400">
+                        Personal Portfolio Assistant
+                    </p>
+                </div>
+            </div>
+
+            <button
+                id="resetChatBtn"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cinema-surface hover:bg-cinema-border/60 border border-cinema-border text-xs text-slate-300 hover:text-white transition"
+                title="Mulai Obrolan Baru"
+            >
+                <i
+                    data-lucide="rotate-ccw"
+                    class="w-3.5 h-3.5 text-cinema-gold"
+                ></i>
+                <span>Chat Baru</span>
+            </button>
+        </header>
+
+        <!-- Main Chat Area -->
+        <main id="chatContainer" class="flex-1 overflow-y-auto px-4 py-6">
+            <div
+                class="max-w-2xl mx-auto flex flex-col min-h-full justify-between"
+            >
+                <!-- Welcome State (Hilang otomatis saat mulai chat) -->
+                <div
+                    id="welcomeView"
+                    class="my-auto py-8 text-center space-y-6"
+                >
+                    <div
+                        class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-cinema-surface border border-cinema-gold/40 shadow-lg"
+                    >
+                        <i
+                            data-lucide="sparkles"
+                            class="w-7 h-7 text-cinema-goldLight"
+                        ></i>
+                    </div>
+
+                    <div class="space-y-2 max-w-lg mx-auto">
+                        <h2
+                            class="font-cinema text-xl md:text-2xl font-bold text-white"
+                        >
+                            Halo, ada yang ingin kamu ketahui tentang Annisa?
+                        </h2>
+                        <p
+                            class="text-xs md:text-sm text-slate-400 leading-relaxed"
+                        >
+                            Tanyakan langsung seputar latar belakang pendidikan,
+                            pengalaman kerja di Formulatrix & Telkomsel,
+                            publikasi riset AI, atau keahlian UI/UX.
+                        </p>
+                    </div>
+
+                    <!-- Simple Suggestion Chips -->
+                    <div
+                        class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-left max-w-xl mx-auto pt-2"
+                    >
+                        <button
+                            data-prompt="Siapa Annisa Izzatul Latifa dan apa fokus keahlian utamanya?"
+                            class="prompt-chip p-3 rounded-xl bg-cinema-surface hover:bg-cinema-border/50 border border-cinema-border hover:border-cinema-gold/50 transition flex items-center justify-between group"
+                        >
+                            <span
+                                class="text-xs text-slate-200 group-hover:text-white"
+                                >Profil & Keahlian Utama</span
+                            >
+                            <i
+                                data-lucide="arrow-up-right"
+                                class="w-3.5 h-3.5 text-slate-500 group-hover:text-cinema-goldLight transition"
+                            ></i>
+                        </button>
+
+                        <button
+                            data-prompt="Ceritakan pengalaman magang Annisa di Formulatrix dan Telkomsel!"
+                            class="prompt-chip p-3 rounded-xl bg-cinema-surface hover:bg-cinema-border/50 border border-cinema-border hover:border-cinema-gold/50 transition flex items-center justify-between group"
+                        >
+                            <span
+                                class="text-xs text-slate-200 group-hover:text-white"
+                                >Pengalaman di Formulatrix & Telkomsel</span
+                            >
+                            <i
+                                data-lucide="arrow-up-right"
+                                class="w-3.5 h-3.5 text-slate-500 group-hover:text-cinema-goldLight transition"
+                            ></i>
+                        </button>
+
+                        <button
+                            data-prompt="Jelaskan riset paper ICSECS 2025 Annisa tentang sistem rekomendasi game dengan BERT!"
+                            class="prompt-chip p-3 rounded-xl bg-cinema-surface hover:bg-cinema-border/50 border border-cinema-border hover:border-cinema-gold/50 transition flex items-center justify-between group"
+                        >
+                            <span
+                                class="text-xs text-slate-200 group-hover:text-white"
+                                >Publikasi Paper ICSECS 2025</span
+                            >
+                            <i
+                                data-lucide="arrow-up-right"
+                                class="w-3.5 h-3.5 text-slate-500 group-hover:text-cinema-goldLight transition"
+                            ></i>
+                        </button>
+
+                        <button
+                            data-prompt="Bagaimana cara menghubungi atau merekrut Annisa?"
+                            class="prompt-chip p-3 rounded-xl bg-cinema-surface hover:bg-cinema-border/50 border border-cinema-border hover:border-cinema-gold/50 transition flex items-center justify-between group"
+                        >
+                            <span
+                                class="text-xs text-slate-200 group-hover:text-white"
+                                >Kontak & Kolaborasi</span
+                            >
+                            <i
+                                data-lucide="arrow-up-right"
+                                class="w-3.5 h-3.5 text-slate-500 group-hover:text-cinema-goldLight transition"
+                            ></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Messages List -->
+                <div id="messagesList" class="space-y-5 pb-4"></div>
+
+                <!-- Typing Indicator -->
+                <div id="typingIndicator" class="hidden py-2">
+                    <div class="flex items-center gap-3">
+                        <img
+                            src="foto.jpg"
+                            alt="Annisa"
+                            class="w-8 h-8 rounded-lg object-cover border border-cinema-gold/50 shrink-0"
+                        />
+                        <div
+                            class="bg-cinema-surface border border-cinema-border px-4 py-3 rounded-2xl rounded-tl-none inline-flex items-center gap-1.5"
+                        >
+                            <span
+                                class="w-1.5 h-1.5 rounded-full bg-cinema-goldLight dot-1"
+                            ></span>
+                            <span
+                                class="w-1.5 h-1.5 rounded-full bg-cinema-goldLight dot-2"
+                            ></span>
+                            <span
+                                class="w-1.5 h-1.5 rounded-full bg-cinema-goldLight dot-3"
+                            ></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Minimalist Input Bar -->
+        <footer
+            class="p-4 bg-cinema-bg/90 border-t border-cinema-border/80 backdrop-blur-md shrink-0"
+        >
+            <form id="chatForm" class="max-w-2xl mx-auto">
+                <div
+                    class="flex items-end gap-2 bg-cinema-surface border border-cinema-border focus-within:border-cinema-gold/60 rounded-2xl p-2 transition"
+                >
+                    <textarea
+                        id="userInput"
+                        rows="1"
+                        placeholder="Ketik pertanyaanmu tentang Annisa..."
+                        class="w-full bg-transparent text-slate-100 placeholder-slate-500 text-sm focus:outline-none resize-none px-3 py-2 max-h-32 overflow-y-auto"
+                    ></textarea>
+                    <button
+                        type="submit"
+                        id="sendBtn"
+                        class="px-4 py-2.5 rounded-xl bg-cinema-gold hover:bg-cinema-goldLight text-black font-semibold text-xs flex items-center gap-1.5 transition shrink-0"
+                    >
+                        <span>Kirim</span>
+                        <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+            </form>
+        </footer>
+
+        <script>
+            // =========================================================================
+            // KONFIGURASI URL BACKEND (Hanya di dalam kode, tidak terlihat oleh user)
+            // =========================================================================
+            const WEBHOOK_URL =
+                "http://localhost:5678/webhook/64eb881e-3826-465f-8ddc-165ad55d23c4/chat";
+
+            // Cadangan jawaban pintar jika server lokal sedang mati
+            const FALLBACK_ANSWERS = [
+                {
+                    keywords: [
+                        "siapa",
+                        "profil",
+                        "tentang",
+                        "annisa",
+                        "halo",
+                        "hai",
+                        "keahlian",
+                        "skill",
+                    ],
+                    reply: "Halo! **Annisa Izzatul Latifa** adalah lulusan **S1 Informatika Telkom University** yang berfokus pada **AI/Machine Learning Engineering** dan **UI/UX Design**.\n\nIa berpengalaman membangun model NLP (BERT), sistem rekomendasi, model prediksi jaringan, serta merancang antarmuka aplikasi industri menggunakan Figma.",
+                },
+                {
+                    keywords: [
+                        "formulatrix",
+                        "ux",
+                        "ui",
+                        "nt8",
+                        "desain",
+                        "figma",
+                    ],
+                    reply: "Di **Formulatrix**, Annisa berperan sebagai **Graduate UX Designer Intern**. Ia merancang *UI scripts*, *user stories*, dokumentasi fitur, serta prototipe interaktif di Figma untuk perangkat lunak instrumen laboratorium **NT8**.",
+                },
+                {
+                    keywords: [
+                        "telkomsel",
+                        "magang",
+                        "intern",
+                        "kerja",
+                        "pengalaman",
+                        "packet loss",
+                        "random forest",
+                        "smote",
+                    ],
+                    reply: "Annisa memiliki pengalaman magang di dua perusahaan:\n\n* **Telkomsel Bandung:** Mengembangkan model Machine Learning *Random Forest* dengan *SMOTE* untuk memprediksi *packet loss* jaringan beserta integrasi ke antarmuka web.\n* **Formulatrix:** Merancang *end-to-end* UI/UX dan dokumentasi sistem untuk perangkat lunak automasi laboratorium NT8.",
+                },
+                {
+                    keywords: [
+                        "paper",
+                        "icsecs",
+                        "riset",
+                        "bert",
+                        "game",
+                        "rekomendasi",
+                        "skripsi",
+                    ],
+                    reply: "Annisa mempublikasikan paper ilmiah di konferensi internasional terindeks Scopus **ICSECS 2025** mengenai **Hybrid Video Game Recommendation System** yang menggabungkan *Content-Based Filtering*, *Collaborative Filtering*, dan analisis sentimen ulasan Steam menggunakan **BERT**.",
+                },
+                {
+                    keywords: [
+                        "kontak",
+                        "hubungi",
+                        "hire",
+                        "rekrut",
+                        "email",
+                        "linkedin",
+                        "kolaborasi",
+                    ],
+                    reply: "Kamu dapat menghubungi **Annisa Izzatul Latifa** melalui profil **LinkedIn** resminya atau melalui halaman kontak di website portofolio utama untuk diskusi peluang kerja maupun kolaborasi proyek.",
+                },
+            ];
+
+            function getFallbackReply(text) {
+                const q = text.toLowerCase();
+                for (const item of FALLBACK_ANSWERS) {
+                    if (item.keywords.some((kw) => q.includes(kw)))
+                        return item.reply;
+                }
+                return "Saya adalah asisten AI **Annisa Izzatul Latifa** (S1 Informatika Telkom University). Kamu bisa bertanya seputar pengalaman kerja Annisa di **Formulatrix** & **Telkomsel**, riset paper **ICSECS 2025 (BERT)**, keahlian teknis **AI/ML & UI/UX**, atau kontak kolaborasi.";
+            }
+
+            // Session ID otomatis di belakang layar
+            let sessionId = localStorage.getItem("annisa_chat_session_id");
+            if (!sessionId) {
+                sessionId =
+                    "session-" + Math.random().toString(36).substring(2, 11);
+                localStorage.setItem("annisa_chat_session_id", sessionId);
+            }
+
+            const chatContainer = document.getElementById("chatContainer");
+            const welcomeView = document.getElementById("welcomeView");
+            const messagesList = document.getElementById("messagesList");
+            const typingIndicator = document.getElementById("typingIndicator");
+            const chatForm = document.getElementById("chatForm");
+            const userInput = document.getElementById("userInput");
+            const resetChatBtn = document.getElementById("resetChatBtn");
+
+            let isBusy = false;
+
+            function escapeHtml(str) {
+                const div = document.createElement("div");
+                div.textContent = str;
+                return div.innerHTML;
+            }
+
+            function formatText(text) {
+                let html = escapeHtml(text || "");
+                html = html.replace(
+                    /\*\*(.*?)\*\*/g,
+                    '<strong class="text-cinema-goldLight font-semibold">$1</strong>',
+                );
+                html = html.replace(
+                    /\*(.*?)\*/g,
+                    '<em class="italic text-slate-200">$1</em>',
+                );
+                html = html.replace(
+                    /^\* (.*$)/gim,
+                    '<div class="flex items-start gap-2 my-1"><span class="text-cinema-gold">•</span><span>$1</span></div>',
+                );
+                html = html.replace(/\n/g, "<br/>");
+                return html;
+            }
+
+            function appendBubble(role, text) {
+                welcomeView.classList.add("hidden");
+                const isUser = role === "user";
+                const wrapper = document.createElement("div");
+                wrapper.className = `flex items-start gap-3 ${isUser ? "flex-row-reverse" : ""}`;
+
+                const avatar = isUser
+                    ? `<div class="w-8 h-8 rounded-lg bg-cinema-border border border-cinema-gold/30 flex items-center justify-center shrink-0 text-cinema-goldLight"><i data-lucide="user" class="w-4 h-4"></i></div>`
+                    : `<img src="foto.jpg" alt="Annisa" class="w-8 h-8 rounded-lg object-cover border border-cinema-gold/50 shrink-0" />`;
+
+                const bubbleStyle = isUser
+                    ? "bg-cinema-crimson text-white rounded-2xl rounded-tr-none border border-cinema-gold/30"
+                    : "bg-cinema-surface text-slate-100 rounded-2xl rounded-tl-none border border-cinema-border";
+
+                wrapper.innerHTML = `
+                ${avatar}
+                <div class="max-w-[82%] px-4 py-3 text-xs md:text-sm leading-relaxed ${bubbleStyle}">
+                    ${isUser ? escapeHtml(text) : formatText(text)}
+                </div>
+            `;
+
+                messagesList.appendChild(wrapper);
+                lucide.createIcons();
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+            async function handleSend(customPrompt = null) {
+                const text = (
+                    customPrompt !== null ? customPrompt : userInput.value
+                ).trim();
+                if (!text || isBusy) return;
+
+                appendBubble("user", text);
+                userInput.value = "";
+                userInput.style.height = "auto";
+
+                isBusy = true;
+                typingIndicator.classList.remove("hidden");
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+
+                try {
+                    let reply = "";
+                    if (WEBHOOK_URL.trim()) {
+                        const res = await fetch(WEBHOOK_URL.trim(), {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                chatInput: text,
+                                sessionId: sessionId,
+                            }),
+                        });
+
+                        if (!res.ok) throw new Error("Server error");
+                        const raw = await res.text();
+                        try {
+                            const json = JSON.parse(raw);
+                            const item = Array.isArray(json) ? json[0] : json;
+                            reply =
+                                item.output ||
+                                item.text ||
+                                item.response ||
+                                item.message ||
+                                raw;
+                        } catch {
+                            reply = raw;
+                        }
+                    } else {
+                        await new Promise((r) => setTimeout(r, 600));
+                        reply = getFallbackReply(text);
+                    }
+
+                    typingIndicator.classList.add("hidden");
+                    appendBubble("assistant", reply);
+                } catch (e) {
+                    typingIndicator.classList.add("hidden");
+                    appendBubble("assistant", getFallbackReply(text));
+                } finally {
+                    isBusy = false;
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }
+            }
+
+            // Event Listeners
+            chatForm.addEventListener("submit", (e) => {
+                e.preventDefault();
+                handleSend();
+            });
+
+            userInput.addEventListener("input", () => {
+                userInput.style.height = "auto";
+                userInput.style.height =
+                    Math.min(userInput.scrollHeight, 120) + "px";
+            });
+
+            userInput.addEventListener("keydown", (e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSend();
+                }
+            });
+
+            document.querySelectorAll(".prompt-chip").forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    handleSend(btn.getAttribute("data-prompt"));
+                });
+            });
+
+            resetChatBtn.addEventListener("click", () => {
+                sessionId =
+                    "session-" + Math.random().toString(36).substring(2, 11);
+                localStorage.setItem("annisa_chat_session_id", sessionId);
+                messagesList.innerHTML = "";
+                welcomeView.classList.remove("hidden");
+            });
+
+            lucide.createIcons();
+        </script>
+    </body>
+</html>
