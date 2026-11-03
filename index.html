@@ -224,7 +224,7 @@
                 <div id="typingIndicator" class="hidden py-2">
                     <div class="flex items-center gap-3">
                         <img
-                            src="foto.jpg"
+                            src="foto.JPG"
                             alt="Annisa"
                             class="w-8 h-8 rounded-lg object-cover border border-cinema-gold/50 shrink-0"
                         />
@@ -277,7 +277,7 @@
             // KONFIGURASI URL BACKEND (Hanya di dalam kode, tidak terlihat oleh user)
             // =========================================================================
             const WEBHOOK_URL =
-                "http://localhost:5678/webhook/64eb881e-3826-465f-8ddc-165ad55d23c4/chat";
+                "https://you-constructed-keno-received.trycloudflare.com/webhook/64eb881e-3826-465f-8ddc-165ad55d23c4/chat";
 
             // Cadangan jawaban pintar jika server lokal sedang mati
             const FALLBACK_ANSWERS = [
@@ -403,7 +403,7 @@
 
                 const avatar = isUser
                     ? `<div class="w-8 h-8 rounded-lg bg-cinema-border border border-cinema-gold/30 flex items-center justify-center shrink-0 text-cinema-goldLight"><i data-lucide="user" class="w-4 h-4"></i></div>`
-                    : `<img src="foto.jpg" alt="Annisa" class="w-8 h-8 rounded-lg object-cover border border-cinema-gold/50 shrink-0" />`;
+                    : `<img src="foto.JPG" alt="Annisa" class="w-8 h-8 rounded-lg object-cover border border-cinema-gold/50 shrink-0" />`;
 
                 const bubbleStyle = isUser
                     ? "bg-cinema-crimson text-white rounded-2xl rounded-tr-none border border-cinema-gold/30"
