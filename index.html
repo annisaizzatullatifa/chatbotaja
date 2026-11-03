@@ -276,7 +276,8 @@
             // =========================================================================
             // KONFIGURASI URL BACKEND (Hanya di dalam kode, tidak terlihat oleh user)
             // =========================================================================
-            const WEBHOOK_URL = "n8n-proxy.annisaizzatullatifa.workers.dev";
+            const WEBHOOK_URL =
+                "https://n8n-proxy.annisaizzatullatifa.workers.dev";
 
             // Cadangan jawaban pintar jika server lokal sedang mati
             const FALLBACK_ANSWERS = [
@@ -440,6 +441,7 @@
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({
+                                action: "sendMessage",
                                 chatInput: text,
                                 sessionId: sessionId,
                             }),
